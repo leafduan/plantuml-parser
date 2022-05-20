@@ -25,6 +25,10 @@ public class PUmlRelation {
         this.relation = relation;
     }
 
+    protected String getTarget () {
+        return this.target;
+    }
+
     @Override
     public String toString() {
         return source + " " + relation + " " + target;

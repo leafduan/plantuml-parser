@@ -5,8 +5,8 @@ import com.github.javaparser.ast.body.*;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * 类
@@ -104,6 +104,10 @@ public class ClassVoidVisitor extends VoidVisitorAdapter<PUml> {
 
             }
         }
+
+        // parse field usage
+        parseFiledUsageAggregation(cORid, importMap, pUmlClass, pUmlView);
+
         super.visit(cORid, pUml);
     }
 
@@ -294,4 +298,44 @@ public class ClassVoidVisitor extends VoidVisitorAdapter<PUml> {
             return packageName + ".";
         }
     }
+
+    private void parseFiledUsageAggregation(ClassOrInterfaceDeclaration clazz,
+                                            Map<String, String> importMap,
+                                            PUmlClass pUmlClass,
+                                            PUmlView pUmlView) {
+        if (clazz.isInterface()) {
+            return;
+        }
+
+        Set<String> constructorParameterTypes = clazz.getConstructors().stream()
+                .flatMap(c -> c.getParameters().stream())
+                .map(c -> c.getTypeAsString())
+                .collect(Collectors.toSet());
+
+        for (FieldDeclaration field : clazz.getFields()) {
+            VariableDeclarator variable = field.getVariable(0);
+            boolean isPrivate = field.getModifiers().stream().anyMatch(m -> m.toString().trim().equalsIgnoreCase("private"));
+            boolean isAutowired = field.getAnnotationByName("Autowired").isPresent();
+            boolean isConstructorParameter = constructorParameterTypes.contains(variable.getTypeAsString());
+            boolean isAllArgsConstructor = clazz.getAnnotationByName("AllArgsConstructor").isPresent();
+            if (isPrivate && (isAutowired || isConstructorParameter || isAllArgsConstructor)) {
+                PUmlRelation pUmlRelation = new PUmlRelation();
+                pUmlRelation.setSource(getPackageNamePrefix(pUmlClass.getPackageName()) + clazz.getNameAsString());
+                String target = getPackageNamePrefix(pUmlClass.getPackageName()) + variable.getTypeAsString();
+
+                if (importMap.containsKey(variable.getTypeAsString())) {
+                    if (parserConfig.isShowPackage()) {
+                        target = importMap.get(variable.getTypeAsString());
+                    } else {
+                        target = variable.getNameAsString();
+                    }
+                }
+
+                pUmlRelation.setTarget(target + " : " + variable.getNameAsString());
+                pUmlRelation.setRelation("o--");
+                pUmlView.addPUmlRelation(pUmlRelation);
+            }
+        }
+    }
+
 }

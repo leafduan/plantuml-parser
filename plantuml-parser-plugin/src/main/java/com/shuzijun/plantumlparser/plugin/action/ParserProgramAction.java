@@ -41,7 +41,7 @@ public class ParserProgramAction extends AnAction {
             parserConfig.addFilePath(virtualFile.getPath());
         }
         if (parserConfig.getFilePaths().isEmpty()) {
-            Notifications.Bus.notify(new Notification("plantuml-parser", "", PropertiesUtils.getInfo("select.empty"), NotificationType.WARNING), e.getProject());
+            Notifications.Bus.notify(new Notification("plantuml-parser-leaf", "", PropertiesUtils.getInfo("select.empty"), NotificationType.WARNING), e.getProject());
             return;
         }
         ParserConfigDialog parserConfigDialog = new ParserConfigDialog(e.getProject(), parserConfig);
@@ -49,20 +49,20 @@ public class ParserProgramAction extends AnAction {
             try {
                 parserConfig = parserConfigDialog.getParserConfig();
             }catch (NullPointerException nullPointerException){
-                Notifications.Bus.notify(new Notification("plantuml-parser", "", nullPointerException.getMessage(), NotificationType.ERROR), e.getProject());
+                Notifications.Bus.notify(new Notification("plantuml-parser-leaf", "", nullPointerException.getMessage(), NotificationType.ERROR), e.getProject());
                 throw nullPointerException;
             }
             ParserProgram parserProgram = new ParserProgram(parserConfig);
             try {
                 parserProgram.execute();
-                Notifications.Bus.notify(new Notification("plantuml-parser", "", PropertiesUtils.getInfo("success", parserConfig.getOutFilePath()), NotificationType.INFORMATION), e.getProject());
+                Notifications.Bus.notify(new Notification("plantuml-parser-leaf", "", PropertiesUtils.getInfo("success", parserConfig.getOutFilePath()), NotificationType.INFORMATION), e.getProject());
                 VirtualFile vf = LocalFileSystem.getInstance().refreshAndFindFileByIoFile(new File(parserConfig.getOutFilePath()));
                 OpenFileDescriptor descriptor = new OpenFileDescriptor(e.getProject(), vf);
                 FileEditorManager.getInstance(e.getProject()).openTextEditor(descriptor, false);
             } catch (NullPointerException n) {
-                Notifications.Bus.notify(new Notification("plantuml-parser", "", n.getMessage(), NotificationType.WARNING), e.getProject());
+                Notifications.Bus.notify(new Notification("plantuml-parser-leaf", "", n.getMessage(), NotificationType.WARNING), e.getProject());
             } catch (IOException ioException) {
-                Notifications.Bus.notify(new Notification("plantuml-parser", "", PropertiesUtils.getInfo("io.exception", ioException.getMessage()), NotificationType.WARNING), e.getProject());
+                Notifications.Bus.notify(new Notification("plantuml-parser-leaf", "", PropertiesUtils.getInfo("io.exception", ioException.getMessage()), NotificationType.WARNING), e.getProject());
             }
         }
 
@@ -105,7 +105,7 @@ public class ParserProgramAction extends AnAction {
             Action action = new AbstractAction() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    BrowserUtil.browse("https://github.com/shuzijun/plantuml-parser");
+                    BrowserUtil.browse("https://github.com/leafduan/plantuml-parser");
                 }
             };
             action.putValue(Action.NAME, "help");

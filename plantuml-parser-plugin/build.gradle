@@ -15,7 +15,7 @@ dependencies {
 }
 
 intellij {
-    pluginName 'plantuml-parser'
+    pluginName 'plantuml-parser-leaf'
     version '2020.1'
     type 'IU'
     downloadSources false

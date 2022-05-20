@@ -1,8 +1,8 @@
 <idea-plugin>
-    <id>plantuml-parser</id>
-    <name>PlantUML Parser</name>
+    <id>plantuml-parser-leaf</id>
+    <name>PlantUML Parser Leaf</name>
     <version>0.0.2</version>
-    <vendor email="shuzijun0109@gmail.com" url="https://github.com/shuzijun/plantuml-parser">shuzijun</vendor>
+    <vendor email="shine8rain@gmail.com" url="https://github.com/leafduan/plantuml-parser">leaf</vendor>
 
     <description><![CDATA[
         <div>
@@ -48,8 +48,10 @@
     <idea-version since-build="163.0"/>
 
     <actions>
-        <action class="com.shuzijun.plantumlparser.plugin.action.ParserProgramAction" id="parserProgramAction"
-                text="PlantUML Parser" description="Generate PumL through the original code">
+        <action class="com.shuzijun.plantumlparser.plugin.action.ParserProgramAction"
+                id="parserProgramActionLeaf"
+                text="PlantUML Parser Leaf"
+                description="Generate PumL through the original code">
             <add-to-group group-id="ProjectViewPopupMenu" anchor="last"/>
         </action>
     </actions>

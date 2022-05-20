@@ -22,11 +22,9 @@ public class ParserProgram {
 
     private ParserConfig parserConfig;
 
-
     public ParserProgram(ParserConfig parserConfig) {
         this.parserConfig = parserConfig;
     }
-
 
     public void execute() throws IOException {
         if(parserConfig.getLanguageLevel()!=null) {
@@ -41,7 +39,6 @@ public class ParserProgram {
             Optional<PackageDeclaration> packageDeclaration = compilationUnit.getPackageDeclaration();
             VoidVisitor<PUml> classNameCollector = new ClassVoidVisitor(packageDeclaration.isPresent() ? packageDeclaration.get().getNameAsString() : "", parserConfig);
             classNameCollector.visit(compilationUnit, pUmlView);
-
         }
 
         if (this.parserConfig.getOutFilePath() == null) {

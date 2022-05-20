@@ -58,7 +58,7 @@ public class MTAUtils {
         public void run() {
             try {
                 if (version == null) {
-                    version = PluginManager.getPlugin(PluginId.getId("plantuml-parser")).getVersion()
+                    version = PluginManager.getPlugin(PluginId.getId("plantuml-parser-leaf")).getVersion()
                             .replace("v", "").replaceAll("-|_", ".");
                 }
                 if (userAgent == null) {
